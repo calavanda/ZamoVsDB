@@ -1,4 +1,4 @@
-name: CI & Deploy
+name: CI
 
 on:
   push:
@@ -7,12 +7,6 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
   test:
@@ -41,29 +35,3 @@ jobs:
           CLEARED=$(echo "$LOG" | grep -c CLEARED || true)
           echo "cleared: $CLEARED/12"
           test "$CLEARED" -eq 12
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Build (Matomo config injected from secrets)
-        run: pnpm build
-        env:
-          VITE_MATOMO_URL: ${{ secrets.MATOMO_URL }}
-          VITE_MATOMO_SITE_ID: ${{ secrets.MATOMO_SITE_ID }}
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-      - id: deployment
-        uses: actions/deploy-pages@v4
