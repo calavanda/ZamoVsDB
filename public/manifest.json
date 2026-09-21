@@ -1,6 +1,6 @@
 {
-  "name": "ZamoRun",
-  "short_name": "ZamoRun",
+  "name": "Zamo VS DB",
+  "short_name": "Zamo VS DB",
   "description": "Un juego 2D de aventuras creado para Zamo, la mascota de la UTGZ.",
   "start_url": "./",
   "display": "fullscreen",

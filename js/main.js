@@ -1,5 +1,5 @@
 // App shell: state machine (title/map/intro/play/clear/gameover/victory),
-// HUD, persistence, and the ZamoRun CTAs.
+// HUD, persistence, and the Zamo VS DB CTAs.
 
 import { VIEW_W, VIEW_H, WORLDS, URLS, SAVE_KEY, PAL } from './constants.js';
 import { LEVELS } from './levels.js';
@@ -16,12 +16,12 @@ const TOTAL_PLUGINS = 27;
 
 // Rotating product facts shown on the COMMIT screen — the visibility hook.
 const FACTS = [
-  'ZamoRun incluye un servidor MCP integrado: los agentes de IA consultan tu BD directamente.',
-  'EXPLAIN visual convierte los planes de consulta en gráficos interactivos.',
-  'Los Notebooks SQL mezclan SQL, Markdown y gráficos en un solo documento.',
-  'El sistema de plugins usa JSON-RPC: escríbelos en cualquier lenguaje.',
-  'Túneles SSH y Kubernetes integrados. Como estas tuberías del juego.',
-  'ZamoRun es open source.',
+  'Zamo VS DB incluye un servidor MCP integrado: los agentes de IA consultan tu BD directamente.',
+  'Usa saltos con precisión: la inercia importa tanto como el tiempo.',
+  'El Deadlock acecha en el Mundo 3: esquiva sus transacciones trabadas.',
+  'Puedes saltar más alto manteniendo presionado el botón de salto.',
+  'Cada mundo representa un motor: SQLite, MySQL y PostgreSQL.',
+  'Zamo VS DB es open source.',
   'El Constructor Visual de Consultas permite hacer JOINs arrastrando. Sin escribir.',
   'PostgreSQL, MySQL, MariaDB y SQLite: compatibles desde el primer día.',
   'Más de 10 temas incluidos. Este juego es básicamente el tema #11.',
@@ -297,7 +297,7 @@ const HINT_PLAY = IS_TOUCH ? '◀ ▶ mover · ▲ saltar' : '←→ mover · ES
 let shareFeedbackT = 0;
 async function shareScore() {
   const url = `${URLS.game}?utm_source=share`;
-  const text = `Completé ${app.score} puntos y rescaté ${app.pluginCount()}/${TOTAL_PLUGINS} plugins en ZamoRun ▦ — hecho por estudiantes del grupo 1010 AEI de la UTGZ.\n${url}`;
+  const text = `Completé ${app.score} puntos y rescaté ${app.pluginCount()}/${TOTAL_PLUGINS} plugins en Zamo VS DB ▦ — hecho por estudiantes del grupo 1010 AEI de la UTGZ.\n${url}`;
   try {
     const card = buildShareCard({
       score: app.score,
@@ -456,7 +456,7 @@ function drawTitle(t) {
 
   drawLogoPixel(ctx, VIEW_W / 2, 70, 32, t);
 
-  text('ZAMO_RUN', VIEW_W / 2, 116, { size: 22, color: PAL.bright, bold: true });
+  text('ZAMO VS DB', VIEW_W / 2, 116, { size: 22, color: PAL.bright, bold: true });
   text('hecho por 2 estudiantes del grupo 1010 AEI de la UTGZ', VIEW_W / 2, 134, { size: 7, color: PAL.muted });
   text('', VIEW_W / 2, 144, { size: 7, color: PAL.cyan });
 
@@ -470,7 +470,7 @@ function drawTitle(t) {
     app.setState('chars');
   }]);
   items.push(['CONTROLES', () => { app.controlsFrom = 'title'; app.setState('controls'); }]);
-  items.push(['ACERCA DE ZAMORUN', () => app.setState('about')]);
+  items.push(['ACERCA DE ZAMO VS DB', () => app.setState('about')]);
   items.push([`SONIDO: ${app.audio.muted ? 'NO' : 'SÍ'}`, () => app.audio.toggleMute()]);
 
   items.forEach(([label], i) => {
@@ -738,7 +738,7 @@ function drawGameOver(t) {
   text('se perdió la conexión con el servidor', VIEW_W / 2, 102, { size: 9, color: PAL.muted });
   text(`puntuación final ${app.score} · ${app.rows} filas`, VIEW_W / 2, 126, { size: 9, color: PAL.text });
   {
-    const msg = 'ZamoRun — hecho por 2 estudiantes del 1010 AEI · UTGZ';
+    const msg = 'Zamo VS DB — hecho por 2 estudiantes del 1010 AEI · UTGZ';
     text(msg, VIEW_W / 2, 148, { size: 7, color: PAL.muted });
   }
   if (t > 60 && Math.floor(t / 30) % 2) text('ENTER: reconectar', VIEW_W / 2, 178, { size: 9, color: PAL.green });
@@ -767,7 +767,7 @@ function drawVictory(t) {
   if (app.pluginCount() < TOTAL_PLUGINS) {
     text('aún hay plugins por ahí — repite niveles desde SELECCIONAR TABLA', VIEW_W / 2, 152, { size: 7, color: PAL.violet });
   }
-  text('ZamoRun — hecho con amor por el grupo 1010 AEI de la UTGZ', VIEW_W / 2, 176, { size: 8, color: PAL.muted });
+  text('Zamo VS DB — hecho con amor por el grupo 1010 AEI de la UTGZ', VIEW_W / 2, 176, { size: 8, color: PAL.muted });
   text('♥ Gracias por jugar', VIEW_W / 2, 192, { size: 9, color: PAL.cyan, bold: true });
   if (t > 90 && Math.floor(t / 30) % 2) text('ENTER: seleccionar nivel', VIEW_W / 2, 232, { size: 8, color: PAL.green });
   if (t > 90 && (app.input.pressed.start || app.input.pressed.jump)) {
@@ -824,10 +824,10 @@ function drawAbout() {
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   drawLogoPixel(ctx, VIEW_W / 2, 34, 15, app.stateT);
-  text('ACERCA DE ZAMORUN', VIEW_W / 2, 64, { size: 13, color: PAL.bright, bold: true });
+  text('ACERCA DE ZAMO VS DB', VIEW_W / 2, 64, { size: 13, color: PAL.bright, bold: true });
 
   const lines = [
-    'ZamoRun es un juego de plataformas hecho por 2 estudiantes',
+    'Zamo VS DB es un juego de plataformas hecho por 2 estudiantes',
     'del grupo 1010 AEI de la UTGZ.',
     '',
     'Corre, salta y derrota al Deadlock para restaurar',

@@ -34,7 +34,7 @@ export function buildShareCard(data, S) {
   drawLogoPixel(c, 600, 80, 42, 12);
   c.fillStyle = '#ffffff';
   c.font = mono(46, true);
-  c.fillText('ZAMORUN', 600, 168);
+  c.fillText('ZAMO VS DB', 600, 168);
   c.fillStyle = '#9ca3af';
   c.font = mono(20);
   c.fillText('mi partida completada:', 600, 208);
