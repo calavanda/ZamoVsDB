@@ -1,4 +1,3 @@
-// Tabularis Run — shared constants
 
 export const TILE = 16;
 export const VIEW_W = 480;
@@ -21,10 +20,10 @@ export const PLAYER = {
 };
 
 export const URLS = {
-  site: 'https://tabularis.dev',
-  game: 'https://game.tabularis.dev',
-  github: 'https://github.com/TabularisDB/tabularis',
-  download: 'https://tabularis.dev/download',
+  site: '',
+  game: '',
+  github: '',
+  download: '',
 };
 
 export const PAL = {
@@ -45,22 +44,22 @@ export const PAL = {
 
 export const WORLDS = [
   {
-    id: 'sqlite', name: 'SQLITE', sub: 'the embedded plains',
+    id: 'sqlite', name: 'SQLITE', sub: 'las llanuras embebidas',
     accent: '#22d3ee', ground: '#101820', groundTop: '#22d3ee',
     sky: ['#08090a', '#0a1018'],
-    boss: { name: 'TABLE LOCK', hp: 3, color: 'amber' },
+    boss: { name: 'BLOQUEO DE TABLA', hp: 3, color: 'amber' },
   },
   {
-    id: 'mysql', name: 'MYSQL', sub: 'the dolphin depths',
+    id: 'mysql', name: 'MYSQL', sub: 'las profundidades del delfín',
     accent: '#f59e0b', ground: '#1a1410', groundTop: '#f59e0b',
     sky: ['#08090a', '#120e08'],
-    boss: { name: 'REPLICATION LAG', hp: 4, color: 'violet' },
+    boss: { name: 'RETRASO DE REPLICACIÓN', hp: 4, color: 'violet' },
   },
   {
-    id: 'postgresql', name: 'POSTGRESQL', sub: 'the elephant spires',
+    id: 'postgresql', name: 'POSTGRESQL', sub: 'las agujas del elefante',
     accent: '#3b82f6', ground: '#0e1426', groundTop: '#3b82f6',
     sky: ['#08090a', '#0a0c1a'],
-    boss: { name: 'THE DEADLOCK', hp: 5, color: 'red' },
+    boss: { name: 'EL DEADLOCK', hp: 5, color: 'red' },
   },
 ];
 
@@ -71,4 +70,4 @@ export const ONEWAY = '=';
 // Climbable data cables: not solid, but hold Up/Down to ride them vertically
 export const CLIMB = new Set(['H']);
 
-export const SAVE_KEY = 'tabularis-run-v1';
+export const SAVE_KEY = 'zamorun-v1';

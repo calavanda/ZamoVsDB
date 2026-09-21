@@ -169,7 +169,7 @@ export class Game {
         this.app.addScore(10);
         this.app.audio.coin();
         this.spark(tx * T + 8, ty * T - 4, '#22d3ee', 6);
-        this.texts.push(new FloatText(tx * T + 8, ty * T - 6, '+1 row', '#22d3ee'));
+        this.texts.push(new FloatText(tx * T + 8, ty * T - 6, '+1 fila', '#22d3ee'));
       } else {
         this.app.audio.bump();
         const kind = { I: 'index', M: 'mcp', R: 'scale' }[ch];
@@ -228,7 +228,7 @@ export class Game {
       if (kind) {
         const tx = Math.floor(this.cam.x / T) + 3 + Math.floor(Math.random() * (VIEW_W / T - 6));
         this.items.push(new SkyDrop(Math.min(tx, this.W - 3), kind));
-        this.texts.push(new FloatText(Math.min(tx, this.W - 3) * T + 8, 26, 'HOTFIX INBOUND', '#a78bfa'));
+        this.texts.push(new FloatText(Math.min(tx, this.W - 3) * T + 8, 26, 'AYUDA INCOMING', '#a78bfa'));
       }
     }
     for (const arr of [this.items, this.bolts, this.orbs, this.particles, this.texts]) {
@@ -327,7 +327,7 @@ export class Game {
           this.map[ty][tx] = '%';
           this.app.setCheckpoint(tx, ty + 1);
           this.app.audio.checkpoint();
-          this.texts.push(new FloatText(tx * T + 8, ty * T - 8, 'BEGIN; — checkpoint', '#34d399'));
+          this.texts.push(new FloatText(tx * T + 8, ty * T - 8, 'BEGIN; — punto de control', '#34d399'));
         }
       }
     }
@@ -368,7 +368,7 @@ export class Game {
   onBossDead() {
     this.bossDead = true;
     this.shake = 20;
-    this.texts.push(new FloatText(this.boss.cx, this.boss.y - 10, 'LOCK RELEASED', '#34d399'));
+    this.texts.push(new FloatText(this.boss.cx, this.boss.y - 10, 'BLOQUEO LIBERADO', '#34d399'));
   }
 
   // --------------------------------------------------------------- camera ---
@@ -461,7 +461,7 @@ export class Game {
       ctx.font = '8px monospace';
       ctx.textAlign = 'center';
       ctx.globalAlpha = a;
-      ctx.fillText('ssh tunnel: forwarding...', VIEW_W / 2, VIEW_H / 2);
+      ctx.fillText('túnel ssh: redirigiendo...', VIEW_W / 2, VIEW_H / 2);
       ctx.globalAlpha = 1;
     }
   }
@@ -782,7 +782,7 @@ export class Game {
     // how-to hint for the first seconds of the fight
     if (this.frame < 480 && this.frame % 60 < 40) {
       ctx.fillStyle = '#fde047';
-      ctx.fillText(`jump on its head ×${b.maxHp} to release the lock!`, VIEW_W / 2, y + 18);
+      ctx.fillText(`¡sáltale la cabeza ×${b.maxHp} para liberar el bloqueo!`, VIEW_W / 2, y + 18);
     }
   }
 }

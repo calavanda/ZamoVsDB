@@ -385,21 +385,21 @@ function w3boss() {
 export const LEVELS = [
   [
     { name: 'init.db', gen: w1l1 },
-    { name: 'schema migration', gen: w1l2 },
-    { name: 'VACUUM needed', gen: w1l3 },
-    { name: 'BOSS: TABLE LOCK', gen: w1boss },
+    { name: 'migración de esquema', gen: w1l2 },
+    { name: 'VACUUM necesario', gen: w1l3 },
+    { name: 'BOSS: BLOQUEO DE TABLA', gen: w1boss },
   ],
   [
-    { name: 'connection pool', gen: w2l1 },
-    { name: 'binlog caverns', gen: w2l2 },
-    { name: 'stored procedures', gen: w2l3 },
-    { name: 'BOSS: REPLICATION LAG', gen: w2boss },
+    { name: 'grupo de conexiones', gen: w2l1 },
+    { name: 'cavernas de binlog', gen: w2l2 },
+    { name: 'procedimientos almacenados', gen: w2l3 },
+    { name: 'BOSS: RETRASO DE REPLICACIÓN', gen: w2boss },
   ],
   [
-    { name: 'the query planner', gen: w3l1 },
-    { name: 'TOAST tundra', gen: w3l2 },
-    { name: 'WAL ascent', gen: w3l3 },
-    { name: 'BOSS: THE DEADLOCK', gen: w3boss },
+    { name: 'el planificador de consultas', gen: w3l1 },
+    { name: 'tundra TOAST', gen: w3l2 },
+    { name: 'ascenso WAL', gen: w3l3 },
+    { name: 'BOSS: EL DEADLOCK', gen: w3boss },
   ],
 ];
 

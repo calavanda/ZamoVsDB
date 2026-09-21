@@ -5,7 +5,7 @@
 // resists casual code-reading, not a determined offline brute force of the
 // 100k 5-digit space — that's the limit without a server.)
 
-const SALT = 'tabularis-run/keys/v1::';
+const SALT = 'zamorun/keys/v1::';
 
 // HASHES[gIdx] = sha256(SALT + code) for the level at world*4 + level.
 const HASHES = [

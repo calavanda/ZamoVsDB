@@ -34,10 +34,10 @@ export function buildShareCard(data, S) {
   drawLogoPixel(c, 600, 80, 42, 12);
   c.fillStyle = '#ffffff';
   c.font = mono(46, true);
-  c.fillText('TABULARIS RUN', 600, 168);
+  c.fillText('ZAMORUN', 600, 168);
   c.fillStyle = '#9ca3af';
   c.font = mono(20);
-  c.fillText('my run, committed:', 600, 208);
+  c.fillText('mi partida completada:', 600, 208);
 
   // the big number
   c.fillStyle = '#fde047';
@@ -45,13 +45,13 @@ export function buildShareCard(data, S) {
   c.fillText(String(data.score).padStart(6, '0'), 600, 290);
   c.fillStyle = '#4b5563';
   c.font = mono(18);
-  c.fillText('SCORE', 600, 348);
+  c.fillText('PUNTUACIÓN', 600, 348);
 
   // stat row
   const stats = [
-    [`${data.rows}`, 'rows collected', '#22d3ee'],
-    [`${data.plugins}/${data.totalPlugins}`, 'plugins salvaged', '#a78bfa'],
-    [`${data.unlocked}/${data.totalLevels}`, 'levels unlocked', '#34d399'],
+    [`${data.rows}`, 'filas recogidas', '#22d3ee'],
+    [`${data.plugins}/${data.totalPlugins}`, 'plugins rescatados', '#a78bfa'],
+    [`${data.unlocked}/${data.totalLevels}`, 'niveles desbloqueados', '#34d399'],
   ];
   stats.forEach(([val, label, color], i) => {
     const x = 300 + i * 300;
@@ -66,7 +66,7 @@ export function buildShareCard(data, S) {
   // challenge line
   c.fillStyle = '#34d399';
   c.font = mono(22, true);
-  c.fillText('▶ beat my run: game.tabularis.dev', 600, 466);
+  c.fillText('▶ supera mi partida — 1010 AEI · UTGZ', 600, 466);
 
   // ground strip + cast
   const G = 48;

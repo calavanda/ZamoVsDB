@@ -131,16 +131,16 @@ export class Player {
     if (this.hasMCP) {
       this.hasMCP = false; this.inv = PLAYER.INVULN;
       g.app.audio.hurt();
-      g.floatText(this.x, this.y - 12, 'MCP DISCONNECTED', '#a78bfa');
+      g.floatText(this.x, this.y - 12, 'MCP DESCONECTADO', '#a78bfa');
     } else if (this.hasIndex) {
       this.hasIndex = false; this.inv = PLAYER.INVULN;
       g.app.audio.hurt();
-      g.floatText(this.x, this.y - 12, 'INDEX DROPPED', '#fde047');
+      g.floatText(this.x, this.y - 12, 'ÍNDICE PERDIDO', '#fde047');
     } else if (this.big) {
       this.shrink();
       this.inv = PLAYER.INVULN;
       g.app.audio.hurt();
-      g.floatText(this.x, this.y - 12, 'DOWNSCALED...', '#34d399');
+      g.floatText(this.x, this.y - 12, 'REDUCIENDO…', '#34d399');
     } else {
       this.die(g);
     }
@@ -151,7 +151,7 @@ export class Player {
     this.dead = true; this.deadT = 0;
     this.vy = -6; this.vx = 0;
     g.app.audio.die();
-    g.floatText(this.x, this.y - 14, 'ROLLBACK...', '#ef4444');
+    g.floatText(this.x, this.y - 14, 'ROLLBACK…', '#ef4444');
     g.app.onPlayerDead();
   }
 
@@ -439,7 +439,7 @@ export class Boss extends Enemy {
     this.tele = 46;
     this.vx = 0;
     g.floatText(this.cx, this.y - 12,
-      ['ACQUIRING LOCK', 'LAG SPIKE', 'DEADLOCK'][this.worldIdx], '#fde047');
+      ['BLOQUEANDO TABLA', 'PICO DE LAG', 'DEADLOCK'][this.worldIdx], '#fde047');
     g.app.audio.bump();
   }
   fireAttack(g) {
@@ -600,13 +600,13 @@ function grantPower(g, x, y, kind) {
   g.app.audio.powerup();
   if (kind === 'index') {
     g.player.hasIndex = true;
-    g.floatText(x, y - 10, 'INDEX! queries run faster', '#fde047');
+    g.floatText(x, y - 10, 'ÍNDICE! consultas más rápidas', '#fde047');
   } else if (kind === 'scale') {
-    if (g.player.grow(g)) g.floatText(x, y - 10, 'VERTICAL SCALING! server upgraded', '#34d399');
-    else g.floatText(x, y - 10, 'already at max capacity +500', '#34d399');
+    if (g.player.grow(g)) g.floatText(x, y - 10, '¡ESCALADO VERTICAL! servidor mejorado', '#34d399');
+    else g.floatText(x, y - 10, 'capacidad al máximo +500', '#34d399');
   } else {
     g.player.hasMCP = true;
-    g.floatText(x, y - 10, 'MCP AGENT ONLINE — press X', '#a78bfa');
+    g.floatText(x, y - 10, 'AGENTE MCP EN LÍNEA — presiona X', '#a78bfa');
   }
   g.app.addScore(500);
 }
@@ -702,7 +702,7 @@ export class Plugin {
       g.pluginsGot.push(this.idx);
       g.app.audio.plugin();
       g.app.addScore(500);
-      g.floatText(this.x + 7, this.y - 8, 'PLUGIN SALVAGED', '#a78bfa');
+      g.floatText(this.x + 7, this.y - 8, 'PLUGIN RESCATADO', '#a78bfa');
       g.spark(this.x + 7, this.y + 4, '#a78bfa', 8);
     }
   }

@@ -1,7 +1,7 @@
 {
-  "name": "Tabularis Run",
-  "short_name": "Tabularis Run",
-  "description": "A free browser platformer from Tabularis, the open-source AI-native database client.",
+  "name": "ZamoRun",
+  "short_name": "ZamoRun",
+  "description": "Un juego 2D de aventuras creado para Zamo, la mascota de la UTGZ.",
   "start_url": "./",
   "display": "fullscreen",
   "orientation": "landscape",

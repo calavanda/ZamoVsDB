@@ -12,10 +12,14 @@ const COLORS = {
   r: '#ef4444', R: '#991b1b',
   m: '#a78bfa', M: '#6d28d9',
   a: '#f59e0b', A: '#b45309',
-  g: '#34d399', G: '#065f46',
-  s: '#94a3b8', S: '#475569',
+  g: '#22c55e', G: '#15803d', // crocodile green / dark green
+  l: '#86efac', // snout light highlight
+  s: '#94a3b8', S: '#334155', // sneaker / soles
   n: '#16202e', N: '#1f2937',
   o: '#fb923c',
+  h: '#1e293b', H: '#0f172a', // hoodie & headphone dark blue
+  q: '#10b981', // headphone neon glow ring
+  t: '#fb7185', // tongue pink
 };
 
 function render(rows, w = 16, h = 16, overrides = {}) {
@@ -103,8 +107,95 @@ const TRIGGER_BODY = [
   '..kkkkkkkkkkkk..',
 ];
 
+// COCO — cocodrilo gamer: auriculares neón, hocico con dientes, sudadera oscura TI, cola
+// Cara a la derecha (face=1 = sin flip). Colores: g=verde vivo, G=verde oscuro,
+// l=verde claro (hocico), h=auricularres, H/h=sudadera, q=aro neón, w=blanco, t=lengua
+const COCO_IDLE = [
+  '...kqqqqqk......', // auriculares arco neón
+  '..kqhhhhhqk.....', // banda + almohadillas
+  '.kGGhqhhhqhGGk..', // cabeza ancha con auriculares a los lados
+  '.kGGGwpGGwpGGGk.', // ojos (blanco + pupila)
+  '.kGGGGGGGGGGGGk.', // mejillas anchas
+  '.kGGGGllllllkk..', // hocico (verde claro) apuntando derecha
+  'kGGGGGtwwwwwGkk.', // boca abierta: lengua + dientes blancos
+  '.kHHHHHHHHGGlk..', // cuello sudadera + barbilla
+  '.kHHHHHHHHHHHk..', // pecho sudadera
+  '.kHHyHHHHyHHHk..', // logo TI en pecho (amarillo)
+  'kGkHHHHHHHHHkk..', // cola verde izq + cuerpo bajo
+  'kGGGkHHHHHkk....', // cola extendida
+  '..kSSkkkSSk.....', // zapatillas
+  '..kSSk.kSSk.....', // suelas
+  '................', // vacío
+  '................', // vacío
+];
+
+const COCO_RUN1 = [
+  '...kqqqqqk......',
+  '..kqhhhhhqk.....',
+  '.kGGhqhhhqhGGk..',
+  '.kGGGwpGGwpGGGk.',
+  '.kGGGGGGGGGGGGk.',
+  '.kGGGGllllllkk..',
+  'kGGGGGtwwwwwGkk.',
+  '.kHHHHHHHHGGlk..',
+  '.kHHHHHHHHHHHk..',
+  '.kHHyHHHHyHHHk..',
+  'kGkHHHHHHHHHkk..',
+  'kGGGkHHHHHkk....',
+  '.kSSk....kSSk...', // piernas abiertas - zancada
+  'kSSk......kSSk..', // suelas separadas
+  '................',
+  '................',
+];
+
+const COCO_RUN2 = [
+  '...kqqqqqk......',
+  '..kqhhhhhqk.....',
+  '.kGGhqhhhqhGGk..',
+  '.kGGGwpGGwpGGGk.',
+  '.kGGGGGGGGGGGGk.',
+  '.kGGGGllllllkk..',
+  'kGGGGGtwwwwwGkk.',
+  '.kHHHHHHHHGGlk..',
+  '.kHHHHHHHHHHHk..',
+  '.kHHyHHHHyHHHk..',
+  'kGkHHHHHHHHHkk..',
+  'kGGGkHHHHHkk....',
+  '...kSSkkSSk.....', // piernas cruzadas - centro
+  '...kSSkkSSk.....',
+  '................',
+  '................',
+];
+
+const COCO_JUMP = [
+  '...kqqqqqk......',
+  '..kqhhhhhqk.....',
+  '.kGGhqhhhqhGGk..',
+  '.kGGGwpGGwpGGGk.',
+  '.kGGGGGGGGGGGGk.',
+  '.kGGGGllllllkk..',
+  'kGGGGGtwwwwwGkk.',
+  '.kHHHHHHHHGGlk..',
+  '.kHHHHHHHHHHHk..',
+  '.kHHyHHHHyHHHk..',
+  'kGkHHHHHHHHHkk..',
+  'kGGGGkHHHHkk....',
+  '...kSSSSSSSSk...', // pies juntos en salto
+  '................', // pies en el aire
+  '................',
+  '................',
+];
+
+export const COCO_FRAMES = {
+  idle: COCO_IDLE,
+  run1: COCO_RUN1,
+  run2: COCO_RUN2,
+  jump: COCO_JUMP,
+};
+
 export const CHARACTERS = [
-  { id: 'tab', name: 'TAB', tag: 'the tabularis cube', body: P_BODY },
+  { id: 'coco', name: 'COCO', tag: 'el cocodrilo gamer de TI', frames: COCO_FRAMES },
+  { id: 'tab', name: 'TAB', tag: 'el cubo de datos', body: P_BODY },
   { id: 'key', name: 'PRIMARY KEY', tag: 'UNIQUE NOT NULL', body: KEY_BODY },
   { id: 'cursor', name: 'CURSOR', tag: 'FETCH NEXT', body: CURSOR_BODY },
   { id: 'trigger', name: 'TRIGGER', tag: 'ON EVENT DO RUN', body: TRIGGER_BODY },
@@ -630,7 +721,12 @@ export function buildSprites() {
   const S = {
     // one animated set per selectable character; `player` aliases the active
     // one (main.js repoints it on selection) so game/sharecard need no logic
-    players: Object.fromEntries(CHARACTERS.map(c => [c.id, {
+    players: Object.fromEntries(CHARACTERS.map(c => [c.id, c.frames ? {
+      idle: render(c.frames.idle),
+      run1: render(c.frames.run1),
+      run2: render(c.frames.run2),
+      jump: render(c.frames.jump),
+    } : {
       idle: playerFrame(c.body, 'idle'),
       run1: playerFrame(c.body, 'run1'),
       run2: playerFrame(c.body, 'run2'),
@@ -670,7 +766,7 @@ export function buildSprites() {
       cable: cableTile(w),
     })),
   };
-  S.player = S.players.tab;
+  S.player = S.players.coco;
   return S;
 }
 
@@ -717,7 +813,7 @@ export function drawLogoCube(ctx, cx, cy, size, t) {
   ctx.restore();
 }
 
-// Pixel-art rendition of the official Tabularis brand logo: the real "T" mark
+// Logo animado del juego (cubo pixel-art giratorio).
 // downscaled to 32×32 and inlined, drawn with smoothing off so it stays crisp
 // and pixelated like the rest of the game. Falls back to the procedural cube
 // until the tiny inline image decodes.

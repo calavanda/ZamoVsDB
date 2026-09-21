@@ -1,5 +1,5 @@
 // App shell: state machine (title/map/intro/play/clear/gameover/victory),
-// HUD, persistence, and the Tabularis CTAs.
+// HUD, persistence, and the ZamoRun CTAs.
 
 import { VIEW_W, VIEW_H, WORLDS, URLS, SAVE_KEY, PAL } from './constants.js';
 import { LEVELS } from './levels.js';
@@ -16,15 +16,15 @@ const TOTAL_PLUGINS = 27;
 
 // Rotating product facts shown on the COMMIT screen — the visibility hook.
 const FACTS = [
-  'Tabularis ships a built-in MCP server: AI agents query your DB directly.',
-  'Visual EXPLAIN turns query plans into interactive graphs.',
-  'SQL Notebooks mix SQL, Markdown and inline charts in one document.',
-  'The plugin system speaks JSON-RPC — write plugins in any language.',
-  'SSH & Kubernetes tunneling are built in. Like these warp pipes.',
-  'Tabularis is open source. Star it: github.com/TabularisDB/tabularis',
-  'The Visual Query Builder lets you drag-and-drop JOINs. No typing.',
-  'PostgreSQL, MySQL, MariaDB and SQLite — out of the box.',
-  '10+ themes included. This game is basically theme #11.',
+  'ZamoRun incluye un servidor MCP integrado: los agentes de IA consultan tu BD directamente.',
+  'EXPLAIN visual convierte los planes de consulta en gráficos interactivos.',
+  'Los Notebooks SQL mezclan SQL, Markdown y gráficos en un solo documento.',
+  'El sistema de plugins usa JSON-RPC: escríbelos en cualquier lenguaje.',
+  'Túneles SSH y Kubernetes integrados. Como estas tuberías del juego.',
+  'ZamoRun es open source.',
+  'El Constructor Visual de Consultas permite hacer JOINs arrastrando. Sin escribir.',
+  'PostgreSQL, MySQL, MariaDB y SQLite: compatibles desde el primer día.',
+  'Más de 10 temas incluidos. Este juego es básicamente el tema #11.',
 ];
 
 const canvas = document.getElementById('game');
@@ -47,7 +47,7 @@ const app = {
   mapIdx: 0,
   pauseIdx: 0,
   controlsFrom: 'title',
-  charId: 'tab',       // selected protagonist (persisted)
+  charId: 'coco',      // selected protagonist (persisted)
   charIdx: 0,          // highlight on the character-select screen
   pinDigits: '',       // access-key entry buffer
   pinMsg: '',
@@ -80,13 +80,13 @@ const app = {
     if (this.rows % 100 === 0) {
       this.lives++;
       this.audio.oneup();
-      game.floatText(game.player.x, game.player.y - 16, '+1 CONNECTION', '#34d399');
+      game.floatText(game.player.x, game.player.y - 16, '+1 CONEXIÓN', '#34d399');
     }
   },
   addScore(n) { this.score += n; },
 
   applyChar(id) {
-    this.charId = this.sprites.players[id] ? id : 'tab';
+    this.charId = this.sprites.players[id] ? id : 'coco';
     this.sprites.player = this.sprites.players[this.charId];
   },
   setCheckpoint(tx, ty) { this.checkpoint = [tx, ty]; },
@@ -260,7 +260,7 @@ function drawShareButton(y) {
   if (saved) shareFeedbackT--;
   ctx.fillStyle = saved ? PAL.green : PAL.cyan;
   ctx.fillRect(x, y, w, h);
-  text(saved ? 'SAVED · CAPTION COPIED' : '▦ SHARE SCORE CARD',
+  text(saved ? 'GUARDADO · TEXTO COPIADO' : '▦ COMPARTIR PUNTUACIÓN',
     VIEW_W / 2, y + h / 2 + 3, { size: 8, color: '#06121a', bold: true });
 }
 
@@ -285,10 +285,10 @@ function drawTextLink(str, x, y, url, { size = 8, color = PAL.cyan, bold = false
   linkHits.push({ x: x - w / 2 - pad, y: y - size / 2 - pad, w: w + pad * 2, h: size + pad * 2, url });
 }
 
-const HINT_MOVE = IS_TOUCH ? '◀ ▶ move · ▲ jump · ✦ query · ▼ ssh tunnel' : '←→ move · SPACE jump · X query · ↓ ssh tunnel · P pause';
-const HINT_MENU = IS_TOUCH ? '▼ select · ▲ confirm' : '↑↓ select · ENTER confirm';
-const HINT_MAP = IS_TOUCH ? '◀ ▶ choose · ▲ connect' : 'arrows: choose · ENTER: connect · ESC: back';
-const HINT_PLAY = IS_TOUCH ? '◀ ▶ move · ▲ jump' : '←→ move · SPACE jump';
+const HINT_MOVE = IS_TOUCH ? '◀ ▶ mover · ▲ saltar · ✦ consulta · ▼ túnel ssh' : '←→ mover · ESPACIO saltar · X consulta · ↓ túnel ssh · P pausa';
+const HINT_MENU = IS_TOUCH ? '▼ bajar · ▲ confirmar' : '↑↓ seleccionar · ENTER confirmar';
+const HINT_MAP = IS_TOUCH ? '◀ ▶ elegir · ▲ conectar' : 'flechas: elegir · ENTER: conectar · ESC: volver';
+const HINT_PLAY = IS_TOUCH ? '◀ ▶ mover · ▲ saltar' : '←→ mover · ESPACIO saltar';
 
 // ------------------------------------------------------------- share CTA ---
 // Renders a score card image: shared natively where the Web Share API
@@ -297,7 +297,7 @@ const HINT_PLAY = IS_TOUCH ? '◀ ▶ move · ▲ jump' : '←→ move · SPACE 
 let shareFeedbackT = 0;
 async function shareScore() {
   const url = `${URLS.game}?utm_source=share`;
-  const text = `I committed ${app.score} points and salvaged ${app.pluginCount()}/${TOTAL_PLUGINS} plugins in TABULARIS RUN ▦ — the platformer from Tabularis, the open-source AI-native database client.\n${url}`;
+  const text = `Completé ${app.score} puntos y rescaté ${app.pluginCount()}/${TOTAL_PLUGINS} plugins en ZamoRun ▦ — hecho por estudiantes del grupo 1010 AEI de la UTGZ.\n${url}`;
   try {
     const card = buildShareCard({
       score: app.score,
@@ -308,26 +308,26 @@ async function shareScore() {
       totalLevels: TOTAL_LEVELS,
     }, app.sprites);
     const blob = await new Promise((r) => card.toBlob(r, 'image/png'));
-    const file = new File([blob], 'tabularis-run-score.png', { type: 'image/png' });
+      const file = new File([blob], 'zamorun-score.png', { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       await navigator.share({ files: [file], text });
     } else {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'tabularis-run-score.png';
+      a.download = 'zamorun-score.png';
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 5000);
       try { await navigator.clipboard.writeText(text); } catch {}
       shareFeedbackT = 150; // ~2.5s of "saved!" on the canvas button
       if (shareBtn) {
-        shareBtn.textContent = 'image saved + caption copied!';
-        setTimeout(() => (shareBtn.textContent = 'share score card'), 2200);
+        shareBtn.textContent = '¡imagen guardada + texto copiado!';
+        setTimeout(() => (shareBtn.textContent = 'compartir puntuación'), 2200);
       }
     }
   } catch {}
 }
 shareBtn?.addEventListener('click', shareScore);
-if (shareBtn) shareBtn.textContent = 'share score card';
+if (shareBtn) shareBtn.textContent = 'compartir puntuación';
 
 // ------------------------------------------------------------ state flow ---
 function startSession(globalIdx) {
@@ -353,7 +353,7 @@ function enterLevel() {
     p.hasIndex = !!app.carry.index;
     p.hasMCP = !!app.carry.mcp;
     if (app.carry.big || app.carry.index || app.carry.mcp) {
-      game.floatText(p.x + p.w / 2, p.y - 14, 'SESSION RESTORED', '#34d399');
+      game.floatText(p.x + p.w / 2, p.y - 14, 'SESIÓN RESTAURADA', '#34d399');
     }
     app.carry = null;
   }
@@ -403,7 +403,7 @@ async function submitPin() {
     app.audio.powerup();
     startSession(idx);                            // jump straight in
   } else {
-    app.pinMsg = 'INVALID KEY — ROLLBACK';
+    app.pinMsg = 'CLAVE INVÁLIDA — ROLLBACK';
     app.pinShake = 26;
     app.pinDigits = '';
     app.audio.hurt();
@@ -456,22 +456,22 @@ function drawTitle(t) {
 
   drawLogoPixel(ctx, VIEW_W / 2, 70, 32, t);
 
-  text('TABULARIS RUN', VIEW_W / 2, 116, { size: 22, color: PAL.bright, bold: true });
-  text('a tiny platformer from the team behind the', VIEW_W / 2, 134, { size: 7, color: PAL.muted });
-  text('open-source AI-native database client', VIEW_W / 2, 144, { size: 7, color: PAL.cyan });
+  text('ZAMO_RUN', VIEW_W / 2, 116, { size: 22, color: PAL.bright, bold: true });
+  text('hecho por 2 estudiantes del grupo 1010 AEI de la UTGZ', VIEW_W / 2, 134, { size: 7, color: PAL.muted });
+  text('', VIEW_W / 2, 144, { size: 7, color: PAL.cyan });
 
-  const items = [['NEW QUERY', () => startSession(0)]];
-  items.push([`SELECT TABLE (${app.unlocked + 1}/${TOTAL_LEVELS} unlocked)`, () => {
+  const items = [['NUEVA CONSULTA', () => startSession(0)]];
+  items.push([`SELECCIONAR TABLA (${app.unlocked + 1}/${TOTAL_LEVELS} desbloqueados)`, () => {
     app.mapIdx = Math.min(app.unlocked, TOTAL_LEVELS - 1);
     app.setState('map');
   }]);
-  items.push([`CHARACTER: ${CHARACTERS.find(c => c.id === app.charId).name}`, () => {
+  items.push([`PERSONAJE: ${CHARACTERS.find(c => c.id === app.charId).name}`, () => {
     app.charIdx = Math.max(0, CHARACTERS.findIndex(c => c.id === app.charId));
     app.setState('chars');
   }]);
-  items.push(['CONTROLS', () => { app.controlsFrom = 'title'; app.setState('controls'); }]);
-  items.push(['ABOUT TABULARIS', () => app.setState('about')]);
-  items.push([`SOUND: ${app.audio.muted ? 'OFF' : 'ON'}`, () => app.audio.toggleMute()]);
+  items.push(['CONTROLES', () => { app.controlsFrom = 'title'; app.setState('controls'); }]);
+  items.push(['ACERCA DE ZAMORUN', () => app.setState('about')]);
+  items.push([`SONIDO: ${app.audio.muted ? 'NO' : 'SÍ'}`, () => app.audio.toggleMute()]);
 
   items.forEach(([label], i) => {
     const sel = i === app.menuIdx;
@@ -481,8 +481,8 @@ function drawTitle(t) {
   });
 
   const got = app.pluginCount();
-  if (got > 0) text(`hidden plugins found: ${got}/${TOTAL_PLUGINS}`, VIEW_W / 2, 226, { size: 7, color: PAL.violet });
-  if (app.input.gamepadActive) text('gamepad connected', VIEW_W - 8, 10, { size: 7, color: PAL.green, align: 'right' });
+  if (got > 0) text(`plugins secretos encontrados: ${got}/${TOTAL_PLUGINS}`, VIEW_W / 2, 226, { size: 7, color: PAL.violet });
+  if (app.input.gamepadActive) text('mando conectado', VIEW_W - 8, 10, { size: 7, color: PAL.green, align: 'right' });
   text(HINT_MOVE, VIEW_W / 2, 242, { size: 7, color: PAL.muted });
   text(HINT_MENU, VIEW_W / 2, 254, { size: 7, color: '#4b5563' });
 
@@ -498,7 +498,7 @@ function drawTitle(t) {
 }
 
 // --------------------------------------------------------- character pick ---
-const CHAR_COLORS = { tab: PAL.cyan, key: '#fde047', cursor: '#34d399', trigger: '#fb923c' };
+const CHAR_COLORS = { coco: '#22c55e', tab: PAL.cyan, key: '#fde047', cursor: '#34d399', trigger: '#fb923c' };
 
 function selectChar(i) {
   app.charIdx = i;
@@ -512,12 +512,12 @@ function selectChar(i) {
 function drawChars(t) {
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
-  text('SELECT CHARACTER', VIEW_W / 2, 28, { size: 14, color: PAL.bright, bold: true });
-  text('tabularis> SET ROLE runner;', VIEW_W / 2, 46, { size: 8, color: PAL.green });
+  text('SELECCIONAR PERSONAJE', VIEW_W / 2, 28, { size: 14, color: PAL.bright, bold: true });
+  text('zamorun> SET ROLE runner;', VIEW_W / 2, 46, { size: 8, color: PAL.green });
 
   charHits = [];
-  const bw = 92, bh = 108, gap = 10;
-  const sx = (VIEW_W - (bw * 4 + gap * 3)) / 2;
+  const bw = 84, bh = 108, gap = 8;
+  const sx = (VIEW_W - (bw * CHARACTERS.length + gap * (CHARACTERS.length - 1))) / 2;
   CHARACTERS.forEach((c, i) => {
     const x = sx + i * (bw + gap), y = 64;
     charHits.push({ x, y, w: bw, h: bh, idx: i });
@@ -539,12 +539,12 @@ function drawChars(t) {
     ctx.drawImage(img, x + bw / 2 - 24, y + 64 - 42 - hop, 48, 48);
 
     text(c.name, x + bw / 2, y + 84, { size: 7, color: sel ? accent : PAL.muted, bold: sel });
-    if (c.id === app.charId) text('● ACTIVE', x + bw / 2, y + 98, { size: 6, color: PAL.green });
+    if (c.id === app.charId) text('● ACTIVO', x + bw / 2, y + 98, { size: 6, color: PAL.green });
   });
 
   const cur = CHARACTERS[app.charIdx];
   text(`"${cur.tag}"`, VIEW_W / 2, 196, { size: 9, color: CHAR_COLORS[cur.id], bold: true });
-  text(IS_TOUCH ? 'tap a character to select' : '←→ choose · ENTER select · ESC back',
+  text(IS_TOUCH ? 'toca un personaje para elegir' : '←→ elegir · ENTER seleccionar · ESC volver',
     VIEW_W / 2, 250, { size: 7, color: PAL.muted });
 
   if (app.input.pressed.right) app.charIdx = (app.charIdx + 1) % CHARACTERS.length;
@@ -557,7 +557,7 @@ function drawChars(t) {
 function drawMap() {
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
-  text('tabularis> SELECT * FROM levels;', VIEW_W / 2, 20, { size: 9, color: PAL.green, bold: true });
+  text('zamorun> SELECT * FROM niveles;', VIEW_W / 2, 20, { size: 9, color: PAL.green, bold: true });
 
   for (let wi = 0; wi < 3; wi++) {
     const world = WORLDS[wi];
@@ -603,7 +603,7 @@ function drawMap() {
     ctx.fillRect(bx, by, bw, bh);
     ctx.strokeStyle = PAL.violet;
     ctx.strokeRect(bx + 0.5, by + 0.5, bw - 1, bh - 1);
-    text('▦ ENTER ACCESS KEY', VIEW_W / 2, by + bh / 2 + 1, { size: 8, color: PAL.violet, bold: true });
+    text('▦ INGRESAR CLAVE DE ACCESO', VIEW_W / 2, by + bh / 2 + 1, { size: 8, color: PAL.violet, bold: true });
   }
   text(HINT_MAP, VIEW_W / 2, 258, { size: 7, color: PAL.muted });
 
@@ -623,12 +623,12 @@ function drawIntro(t) {
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   const w = WORLDS[app.world];
-  text(`WORLD ${app.world + 1}`, VIEW_W / 2, 96, { size: 10, color: PAL.muted });
+  text(`MUNDO ${app.world + 1}`, VIEW_W / 2, 96, { size: 10, color: PAL.muted });
   text(w.name, VIEW_W / 2, 122, { size: 26, color: w.accent, bold: true });
   text(w.sub, VIEW_W / 2, 144, { size: 8, color: PAL.muted });
   const dots = '.'.repeat(1 + (Math.floor(t / 20) % 3));
-  text(`$ tabularis connect ${w.id}${dots}`, VIEW_W / 2, 180, { size: 8, color: PAL.green });
-  text(`CONNECTIONS × ${app.lives}`, VIEW_W / 2, 204, { size: 8, color: PAL.text });
+  text(`$ zamorun connect ${w.id}${dots}`, VIEW_W / 2, 180, { size: 8, color: PAL.green });
+  text(`CONEXIONES × ${app.lives}`, VIEW_W / 2, 204, { size: 8, color: PAL.text });
   if (t > 110) enterLevel();
 }
 
@@ -636,10 +636,10 @@ function drawHUD() {
   ctx.save();
   ctx.fillStyle = 'rgba(8,9,10,0.7)';
   ctx.fillRect(0, 0, VIEW_W, 13);
-  text(`ROWS ${String(app.rows).padStart(4, '0')}`, 6, 7, { size: 7, color: PAL.cyan, align: 'left' });
-  text(`SCORE ${String(app.score).padStart(6, '0')}`, 66, 7, { size: 7, color: PAL.text, align: 'left' });
-  text(`CONN ×${app.lives}`, 148, 7, { size: 7, color: PAL.green, align: 'left' });
-  text(mmss(game.frame), 204, 7, { size: 7, color: PAL.muted, align: 'left' });
+  text(`FILAS ${String(app.rows).padStart(4, '0')}`, 6, 7, { size: 7, color: PAL.cyan, align: 'left' });
+  text(`PUNTOS ${String(app.score).padStart(6, '0')}`, 62, 7, { size: 7, color: PAL.text, align: 'left' });
+  text(`CONEX ×${app.lives}`, 146, 7, { size: 7, color: PAL.green, align: 'left' });
+  text(mmss(game.frame), 200, 7, { size: 7, color: PAL.muted, align: 'left' });
   if (game.pluginTotal > 0) {
     diamonds(244, 7, app.stats[app.key]?.plugins, game.pluginsGot);
   }
@@ -665,7 +665,7 @@ function drawPlay() {
   if (app.state === 'play' && !game.player.climbing && game.climbAt(game.player)) {
     const sx = game.player.x + game.player.w / 2 - game.cam.x;
     const sy = game.player.y - game.cam.y - 8;
-    text(IS_TOUCH ? '▲ ▼ climb' : '↑ ↓ climb', sx, sy, { size: 7, color: PAL.cyan });
+    text(IS_TOUCH ? '▲ ▼ trepar' : '↑ ↓ trepar', sx, sy, { size: 7, color: PAL.cyan });
   }
 
   if (app.deathT >= 0 && ++app.deathT > 110) {
@@ -679,15 +679,15 @@ function drawPause() {
   game.draw(ctx);
   drawHUD();
   dim(0.65);
-  text('-- PAUSED --', VIEW_W / 2, 96, { size: 14, color: PAL.bright, bold: true });
-  text('query execution suspended', VIEW_W / 2, 114, { size: 8, color: PAL.muted });
+  text('-- EN PAUSA --', VIEW_W / 2, 96, { size: 14, color: PAL.bright, bold: true });
+  text('ejecución de consulta suspendida', VIEW_W / 2, 114, { size: 8, color: PAL.muted });
 
   const items = [
-    ['RESUME', () => app.setState('play')],
-    ['RESTART LEVEL', () => { app.checkpoint = null; enterLevel(); }],
-    ['COMMANDS', () => { app.controlsFrom = 'pause'; app.setState('controls'); }],
-    [`SOUND: ${app.audio.muted ? 'OFF' : 'ON'}`, () => app.audio.toggleMute()],
-    ['EXIT TO MAIN MENU', () => { app.menuIdx = 0; app.setState('title'); }],
+    ['CONTINUAR', () => app.setState('play')],
+    ['REINICIAR NIVEL', () => { app.checkpoint = null; enterLevel(); }],
+    ['CONTROLES', () => { app.controlsFrom = 'pause'; app.setState('controls'); }],
+    [`SONIDO: ${app.audio.muted ? 'NO' : 'SÍ'}`, () => app.audio.toggleMute()],
+    ['SALIR AL MENÚ PRINCIPAL', () => { app.menuIdx = 0; app.setState('title'); }],
   ];
   items.forEach(([label], i) => {
     const sel = i === app.pauseIdx;
@@ -695,7 +695,7 @@ function drawPause() {
       size: 9, color: sel ? PAL.green : PAL.muted, bold: sel,
     });
   });
-  text(IS_TOUCH ? '▼ select · ▲ confirm · II resume' : '↑↓ select · ENTER confirm · P/ESC resume', VIEW_W / 2, 212, { size: 7, color: '#4b5563' });
+  text(IS_TOUCH ? '▼ bajar · ▲ confirmar · II continuar' : '↑↓ seleccionar · ENTER confirmar · P/ESC continuar', VIEW_W / 2, 212, { size: 7, color: '#4b5563' });
 
   if (app.input.pressed.down) app.pauseIdx = (app.pauseIdx + 1) % items.length;
   if (app.input.pressed.up) app.pauseIdx = (app.pauseIdx + items.length - 1) % items.length;
@@ -713,7 +713,7 @@ function drawClear(t) {
   if (t > 15) {
     text('COMMIT;', VIEW_W / 2, 92, { size: 20, color: PAL.green, bold: true });
     const rec = app.lastClear?.newRecord;
-    text(`Query OK (${mmss(game.frame)})${rec ? '  ★ NEW RECORD' : ''}`, VIEW_W / 2, 116, {
+    text(`Consulta OK (${mmss(game.frame)})${rec ? '  ★ NUEVO RÉCORD' : ''}`, VIEW_W / 2, 116, {
       size: 8, color: rec ? PAL.amber : PAL.text,
     });
     if (game.pluginTotal > 0) {
@@ -721,11 +721,11 @@ function drawClear(t) {
       diamonds(VIEW_W / 2 - 12, 134, app.stats[app.key]?.plugins, game.pluginsGot);
     }
     if (game.isBossLevel) {
-      text(`${WORLDS[app.world].boss.name} dropped`, VIEW_W / 2, 134, { size: 8, color: PAL.amber });
+      text(`${WORLDS[app.world].boss.name} eliminado`, VIEW_W / 2, 134, { size: 8, color: PAL.amber });
     }
   }
   if (t > 55) {
-    text('— did you know —', VIEW_W / 2, 170, { size: 7, color: '#4b5563' });
+    text('— ¿sabías que? —', VIEW_W / 2, 170, { size: 7, color: '#4b5563' });
     text(FACTS[app.gIdx % FACTS.length], VIEW_W / 2, 184, { size: 7, color: PAL.cyan });
   }
   if (t > 170) nextLevel();
@@ -735,18 +735,13 @@ function drawGameOver(t) {
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   text('FATAL', VIEW_W / 2, 80, { size: 22, color: PAL.red, bold: true });
-  text('connection to server lost', VIEW_W / 2, 102, { size: 9, color: PAL.muted });
-  text(`final score ${app.score} · ${app.rows} rows`, VIEW_W / 2, 126, { size: 9, color: PAL.text });
+  text('se perdió la conexión con el servidor', VIEW_W / 2, 102, { size: 9, color: PAL.muted });
+  text(`puntuación final ${app.score} · ${app.rows} filas`, VIEW_W / 2, 126, { size: 9, color: PAL.text });
   {
-    const a = 'the real Tabularis never drops your connection → ', b = 'tabularis.dev';
-    ctx.font = '7px "JetBrains Mono", monospace';
-    const aw = ctx.measureText(a).width, bw = ctx.measureText(b).width;
-    const startX = VIEW_W / 2 - (aw + bw) / 2;
-    text(a, startX, 148, { size: 7, color: PAL.muted, align: 'left' });
-    drawTextLink(b, startX + aw + bw / 2, 148,
-      `${URLS.site}?utm_source=tabularis-run&utm_medium=gameover`, { size: 7, color: PAL.cyan });
+    const msg = 'ZamoRun — hecho por 2 estudiantes del 1010 AEI · UTGZ';
+    text(msg, VIEW_W / 2, 148, { size: 7, color: PAL.muted });
   }
-  if (t > 60 && Math.floor(t / 30) % 2) text('ENTER: reconnect', VIEW_W / 2, 178, { size: 9, color: PAL.green });
+  if (t > 60 && Math.floor(t / 30) % 2) text('ENTER: reconectar', VIEW_W / 2, 178, { size: 9, color: PAL.green });
   drawShareButton(196);
   if (t > 60 && (app.input.pressed.start || app.input.pressed.jump)) {
     app.mapIdx = Math.min(app.gIdx, app.unlocked);
@@ -764,20 +759,17 @@ function drawVictory(t) {
     ctx.fillRect(x, y, 2, 2);
   }
   drawLogoPixel(ctx, VIEW_W / 2, 52, 22, t);
-  text('ALL DATABASES RESTORED', VIEW_W / 2, 94, { size: 16, color: PAL.green, bold: true });
-  text('0 rows corrupted. The Deadlock is no more.', VIEW_W / 2, 113, { size: 8, color: PAL.text });
-  text(`SCORE ${app.score} · ROWS ${app.rows} · PLUGINS ${app.pluginCount()}/${TOTAL_PLUGINS}`, VIEW_W / 2, 136, {
+  text('TODAS LAS BASES DE DATOS RESTAURADAS', VIEW_W / 2, 94, { size: 14, color: PAL.green, bold: true });
+  text('0 filas corruptas. El Deadlock ha sido eliminado.', VIEW_W / 2, 113, { size: 8, color: PAL.text });
+  text(`PUNTOS ${app.score} · FILAS ${app.rows} · PLUGINS ${app.pluginCount()}/${TOTAL_PLUGINS}`, VIEW_W / 2, 136, {
     size: 9, color: PAL.cyan, bold: true,
   });
   if (app.pluginCount() < TOTAL_PLUGINS) {
-    text('some plugins are still out there — replay levels from SELECT TABLE', VIEW_W / 2, 152, { size: 7, color: PAL.violet });
+    text('aún hay plugins por ahí — repite niveles desde SELECCIONAR TABLA', VIEW_W / 2, 152, { size: 7, color: PAL.violet });
   }
-  text('You beat the game. Now try the real thing:', VIEW_W / 2, 176, { size: 8, color: PAL.muted });
-  drawTextLink('Tabularis — open-source database client for the AI era', VIEW_W / 2, 190,
-    `${URLS.site}?utm_source=tabularis-run&utm_medium=victory`, { size: 8, color: PAL.cyan });
-  drawTextLink('github.com/TabularisDB/tabularis ★', VIEW_W / 2, 204,
-    URLS.github, { size: 8, color: PAL.amber });
-  if (t > 90 && Math.floor(t / 30) % 2) text('ENTER: level select', VIEW_W / 2, 232, { size: 8, color: PAL.green });
+  text('ZamoRun — hecho con amor por el grupo 1010 AEI de la UTGZ', VIEW_W / 2, 176, { size: 8, color: PAL.muted });
+  text('♥ Gracias por jugar', VIEW_W / 2, 192, { size: 9, color: PAL.cyan, bold: true });
+  if (t > 90 && Math.floor(t / 30) % 2) text('ENTER: seleccionar nivel', VIEW_W / 2, 232, { size: 8, color: PAL.green });
   if (t > 90 && (app.input.pressed.start || app.input.pressed.jump)) {
     app.mapIdx = 0;
     app.setState('map');
@@ -787,7 +779,7 @@ function drawVictory(t) {
 function drawControls() {
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
-  text('CONTROLS', VIEW_W / 2, 26, { size: 14, color: PAL.bright, bold: true });
+  text('CONTROLES', VIEW_W / 2, 26, { size: 14, color: PAL.bright, bold: true });
 
   const col = (x, title, rows, color) => {
     text(title, x, 56, { size: 8, color, bold: true, align: 'left' });
@@ -796,32 +788,32 @@ function drawControls() {
       text(v, x + 88, 76 + i * 14, { size: 7, color: PAL.muted, align: 'left' });
     });
   };
-  col(34, 'KEYBOARD', [
-    ['←→ / A D', 'move'],
-    ['SPACE / Z / ↑', 'jump'],
-    ['↑ ↓ on a cable', 'climb'],
-    ['X / CTRL', 'shoot query'],
-    ['↓', 'enter ssh tunnel'],
-    ['P / ESC', 'pause'],
-    ['M', 'sound on/off'],
+  col(34, 'TECLADO', [
+    ['←→ / A D', 'mover'],
+    ['ESPACIO / Z / ↑', 'saltar'],
+    ['↑ ↓ en cable', 'trepar'],
+    ['X / CTRL', 'disparar consulta'],
+    ['↓', 'entrar túnel ssh'],
+    ['P / ESC', 'pausar'],
+    ['M', 'sonido sí/no'],
   ], PAL.cyan);
-  col(262, 'GAMEPAD', [
-    ['stick / d-pad', 'move'],
-    ['A / Y', 'jump'],
-    ['▲ ▼ on a cable', 'climb'],
-    ['B / X', 'shoot query'],
-    ['d-pad ▼', 'enter ssh tunnel'],
-    ['START', 'pause / confirm'],
-    ['SELECT', 'sound on/off'],
+  col(262, 'MANDO', [
+    ['stick / d-pad', 'mover'],
+    ['A / Y', 'saltar'],
+    ['▲ ▼ en cable', 'trepar'],
+    ['B / X', 'disparar consulta'],
+    ['d-pad ▼', 'entrar túnel ssh'],
+    ['START', 'pausar / confirmar'],
+    ['SELECT', 'sonido sí/no'],
   ], PAL.violet);
 
-  text('TOUCH (mobile): ◀ ▲ ▼ ▶ d-pad (▲▼ climb) · ▲ jump · ✦ shoot · ▼ tunnel', VIEW_W / 2, 196, { size: 7, color: PAL.muted });
+  text('TÁCTIL: ◀ ▲ ▼ ▶ d-pad (▲▼ trepar) · ▲ saltar · ✦ disparar · ▼ túnel', VIEW_W / 2, 196, { size: 7, color: PAL.muted });
   text(
-    app.input.gamepadActive ? '● gamepad connected' : '○ no gamepad detected — press any button on it',
+    app.input.gamepadActive ? '● mando conectado' : '○ sin mando — pulsa cualquier botón para activar',
     VIEW_W / 2, 210,
     { size: 7, color: app.input.gamepadActive ? PAL.green : '#4b5563' },
   );
-  text(IS_TOUCH ? '▲ back' : 'ENTER / ESC: back', VIEW_W / 2, 244, { size: 7, color: PAL.green });
+  text(IS_TOUCH ? '▲ volver' : 'ENTER / ESC: volver', VIEW_W / 2, 244, { size: 7, color: PAL.green });
 
   if (app.input.pressed.start || app.input.pressed.pause || app.input.pressed.jump) {
     app.setState(app.controlsFrom === 'pause' ? 'pause' : 'title');
@@ -832,25 +824,23 @@ function drawAbout() {
   ctx.fillStyle = PAL.bg;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   drawLogoPixel(ctx, VIEW_W / 2, 34, 15, app.stateT);
-  text('ABOUT TABULARIS', VIEW_W / 2, 64, { size: 13, color: PAL.bright, bold: true });
+  text('ACERCA DE ZAMORUN', VIEW_W / 2, 64, { size: 13, color: PAL.bright, bold: true });
 
   const lines = [
-    'Tabularis is a free, open-source database client for',
-    'the AI era — one fast, native app for SQLite, MySQL,',
-    'PostgreSQL and many more.',
+    'ZamoRun es un juego de plataformas hecho por 2 estudiantes',
+    'del grupo 1010 AEI de la UTGZ.',
     '',
-    'Browse and edit data, write SQL with autocomplete, and',
-    'let the built-in AI assistant draft queries, explain',
-    'schemas and speed up your whole workflow.',
+    'Corre, salta y derrota al Deadlock para restaurar',
+    'todas las bases de datos. Recoge filas, desbloquea',
+    'plugins y completa los 12 niveles.',
   ];
   lines.forEach((l, i) =>
-    text(l, VIEW_W / 2, 86 + i * 11, { size: 7, color: i >= 4 ? PAL.text : PAL.muted }));
-  text('Tabularis Run is a love letter to it. Now go play it for real:',
+    text(l, VIEW_W / 2, 86 + i * 11, { size: 7, color: i >= 3 ? PAL.text : PAL.muted }));
+  text('Proyecto del semestre. ¡Orale, a jugar!',
     VIEW_W / 2, 172, { size: 7, color: PAL.cyan });
+  text('♥ Hecho con café y VSCode', VIEW_W / 2, 188, { size: 8, color: PAL.amber, bold: true });
 
-  drawLinkButton('▶ VISIT TABULARIS.DEV',
-    `${URLS.site}?utm_source=tabularis-run&utm_medium=about`, 188);
-  text(IS_TOUCH ? 'tap the bar to open · ▲ back' : 'click the bar to open · ENTER / ESC: back',
+  text(IS_TOUCH ? '▲ volver' : 'ENTER / ESC: volver',
     VIEW_W / 2, 224, { size: 7, color: PAL.green });
 
   if (app.input.pressed.start || app.input.pressed.pause || app.input.pressed.jump) {
@@ -871,8 +861,8 @@ function drawPin() {
   ctx.stroke();
   ctx.restore();
 
-  text('ACCESS KEY', VIEW_W / 2, 24, { size: 14, color: PAL.bright, bold: true });
-  text('tabularis> CONNECT USING KEY — jump to any level', VIEW_W / 2, 40, { size: 7, color: PAL.green });
+  text('CLAVE DE ACCESO', VIEW_W / 2, 24, { size: 14, color: PAL.bright, bold: true });
+  text('tabularis> CONECTAR CON CLAVE — salta a cualquier nivel', VIEW_W / 2, 40, { size: 7, color: PAL.green });
 
   // entry cells
   if (app.pinShake > 0) app.pinShake--;
@@ -913,8 +903,8 @@ function drawPin() {
 
   const msgY = py0 + 4 * (kh + kgap) + 2;
   if (app.pinMsg) text(app.pinMsg, VIEW_W / 2, msgY, { size: 8, color: PAL.red, bold: true });
-  text(IS_TOUCH ? 'tap digits · OK to connect · II back'
-    : 'type 0-9 · ENTER connect · BACKSPACE delete · ESC back',
+  text(IS_TOUCH ? 'toca dígitos · OK para conectar · II volver'
+    : 'escribe 0-9 · ENTER conectar · RETROCESO borrar · ESC volver',
     VIEW_W / 2, 263, { size: 7, color: '#4b5563' });
 
   if (app.input.pressed.pause) { app.menuIdx = 1; app.setState('map'); }

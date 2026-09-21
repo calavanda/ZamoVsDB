@@ -1,17 +1,3 @@
-// Privacy-first Matomo analytics — same model as tabularis.dev.
-//
-// When a tracker is configured at build time, Matomo loads IMMEDIATELY in
-// cookieless / anonymous mode (`disableCookies()`, GDPR legitimate-interest
-// basis): it counts plays without ever setting a cookie or storing personal
-// data. A small opt-in banner (bottom-right) then asks whether the player
-// wants full, cookie-based measurement; granting calls `setCookieConsentGiven`,
-// declining keeps it cookieless. Either way the game is playable.
-//
-// The URL + site id come from VITE_MATOMO_URL / VITE_MATOMO_SITE_ID, which Vite
-// inlines from GitHub Actions secrets during `pnpm build`. When the source is
-// served raw (no build — the whole test suite does this), `import.meta.env` is
-// undefined, so analytics stays off entirely and the banner never appears.
-
 let MATOMO_URL = '';
 let MATOMO_SITE = '';
 try {
@@ -21,17 +7,13 @@ try {
   MATOMO_SITE = import.meta.env.VITE_MATOMO_SITE_ID || '';
 } catch { /* served raw — no analytics */ }
 
-const CONSENT_KEY = 'tabularis-run-consent';
+const CONSENT_KEY = 'zamorun-consent';
 
 function configured() {
   return !!(MATOMO_URL && MATOMO_SITE);
 }
 
 // Loads the Matomo tracker (idempotent) and applies the cookie-consent state.
-// First call injects the script in the requested mode; later calls only flip
-// the cookie consent on the already-running tracker.
-//   cookieConsent === true  → full cookie-based measurement
-//   cookieConsent === false → cookieless tracking (disableCookies)
 function initMatomo(cookieConsent) {
   const u = MATOMO_URL.endsWith('/') ? MATOMO_URL : MATOMO_URL + '/';
   const _paq = (window._paq = window._paq || []);
